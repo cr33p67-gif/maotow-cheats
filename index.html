@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PHANTOM // CS2</title>
+<title>MAOTOW // CS2</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
@@ -340,7 +340,7 @@
 <body>
 
 <nav>
-  <div class="logo" onclick="scrollToId('top')">PHANTOM<span>//</span>CS2</div>
+  <div class="logo" onclick="scrollToId('top')">MAOTOW<span>//</span>CS2</div>
   <ul>
     <li><a onclick="scrollToId('features')">Features</a></li>
     <li><a onclick="scrollToId('pricing')">Pricing</a></li>
@@ -525,8 +525,8 @@
 </section>
 
 <footer>
-  <div class="logo">PHANTOM<span>//</span>CS2</div>
-  <p>© 2026 Phantom. All rights reserved.</p>
+  <div class="logo">MAOTOW<span>//</span>CS2</div>
+  <p>© 2026 Maotow. All rights reserved.</p>
   <p class="disc">
     This product is for educational purposes only. We are not affiliated with Valve,
     Counter-Strike 2, or Steam. Use at your own risk. By purchasing, you agree to
@@ -561,41 +561,30 @@
 /* ============================================================
    CONFIG — FILL THESE IN TO MAKE BUYING WORK
    ============================================================
-   How to get these URLs:
-
-   SELLIX  -> sellix.io -> create product -> copy product URL
-   SELL.APP -> sell.app -> create product -> copy product URL
-   STRIPE  -> dashboard.stripe.com -> Payment Links -> create
-   PAYPAL  -> paypal.me/yourname  OR  business paypal button URL
-
+   SELLIX is gone. Use sellup.io, sell.app, gumroad, or stripe links.
    Leave any URL as "" and it will fall back to Discord.
    ============================================================ */
 const CONFIG = {
   discord: "https://discord.gg/YOUR_INVITE_HERE",
 
-  // Per-tier checkout links. These open when the buyer
-  // clicks a "Buy Now" button on a pricing card.
   checkout: {
-    weekly:   "",  // e.g. "https://yourstore.sellix.io/product/weekly-id"
-    monthly:  "",  // e.g. "https://yourstore.sellix.io/product/monthly-id"
-    lifetime: "",  // e.g. "https://yourstore.sellix.io/product/lifetime-id"
+    weekly:   "",
+    monthly:  "",
+    lifetime: "",
   },
 
-  // Optional: per-method overrides. If set, these override
-  // the per-tier links above when the buyer picks a specific method.
-  // Leave "" to use the tier link.
   methods: {
-    stripe: "",   // e.g. "https://buy.stripe.com/xxx"
-    paypal: "",   // e.g. "https://paypal.me/yourname/30"
-    crypto: "",   // e.g. "https://yourstore.sellix.io/product/crypto-id"
+    stripe: "",
+    paypal: "",
+    crypto: "",
   },
 
-  downloadUrl: "",  // direct link to your loader .zip / .exe
+  downloadUrl: "",
 
   validKeys: [
-    "PHNT-2026-CS2X-LIFE",
-    "PHNT-2026-CS2X-MNTH",
-    "PHNT-2026-CS2X-WEEK",
+    "MAOT-2026-CS2X-LIFE",
+    "MAOT-2026-CS2X-MNTH",
+    "MAOT-2026-CS2X-WEEK",
   ]
 };
 
@@ -628,13 +617,12 @@ function openCheckout(name, price, dur){
     name,
     price,
     dur,
-    key: name.toLowerCase()  // "weekly" | "monthly" | "lifetime"
+    key: name.toLowerCase()
   };
 
   document.getElementById('mPlan').textContent  = name + " — " + dur;
   document.getElementById('mPrice').textContent = "$" + price;
 
-  // Show a warning if there's no checkout URL for this tier
   const tierUrl = CONFIG.checkout[currentPlan.key];
   document.getElementById('modalWarn').style.display = tierUrl ? 'none' : 'block';
 
@@ -653,23 +641,19 @@ function payMethod(method){
 
   let url = "";
 
-  // 1. Method-specific override takes priority
   if(method !== 'discord' && CONFIG.methods && CONFIG.methods[method]){
     url = CONFIG.methods[method];
   }
 
-  // 2. Fall back to the per-tier checkout URL
   if(!url && method !== 'discord'){
     url = CONFIG.checkout[currentPlan.key] || "";
   }
 
-  // 3. Fall back to Discord
   if(!url){
     window.open(CONFIG.discord, "_blank");
     return;
   }
 
-  // Append plan info for tracking
   try {
     const u = new URL(url);
     u.searchParams.set('plan', currentPlan.key);
